@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 using System.Windows.Forms;
+using Twitch_for_desktop_v5_1_0.Forms;
 
 namespace Twitch_for_desktop_v5_1_0.Kraken.Stream
 {
@@ -40,6 +42,7 @@ namespace Twitch_for_desktop_v5_1_0.Kraken.Stream
 
         private Panel _canvas;
         private Button loadMoreButton;
+        ContextMenuStrip rightClickContextMenu;
 
 
         public Show(Panel panel, StreamType type = StreamType.ALL, string[] args = null)
@@ -59,6 +62,43 @@ namespace Twitch_for_desktop_v5_1_0.Kraken.Stream
             loadMoreButton.Size = new Size(200, 80);
             loadMoreButton.Location = new Point(_canvas.Width / 2 - loadMoreButton.Width / 2, 20);
             loadMoreButton.Show();
+
+            rightClickContextMenu = new ContextMenuStrip();
+            rightClickContextMenu.Name = "test";
+            ToolStripMenuItem[] items =
+            {
+                new ToolStripMenuItem() {Text = "Open chat"},
+                new ToolStripMenuItem() {Text = "Open stream"},
+                new ToolStripMenuItem() {Text = "Show profile"},
+                new ToolStripMenuItem() {Text = "View in web"}
+            };
+            rightClickContextMenu.Items.AddRange(items);
+            rightClickContextMenu.ItemClicked += RightClickContextMenu_ItemClicked;
+            /*rightClickContextMenu.MenuItems.Add("Open chat");
+            rightClickContextMenu.MenuItems.Add("Open stream");
+            rightClickContextMenu.MenuItems.Add("Show profile");
+            rightClickContextMenu.MenuItems.Add("View in web");*/
+        }
+
+        private void RightClickContextMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            var obj = (sender as ContextMenuStrip).SourceControl.Parent as PanelInfo;
+
+            switch (e.ClickedItem.Text)
+            {
+                case "Open chat":
+                    Process.Start("TwitchChat.exe", "room=" + obj.Stream.channel.name + " oauth_token=" + Settings.oauthToken);
+                    break;
+                case "Open stream":
+                    new Forms.Dialogs.OpenStream(obj.Stream).ShowDialog();
+                    break;
+                case "Show profile":
+                    new Forms.User(obj.Stream.channel._id).ShowDialog();
+                    break;
+                case "View in web":
+                    Process.Start(obj.Stream.channel.url);
+                    break;
+            }
         }
 
         public void Init()
@@ -148,6 +188,7 @@ namespace Twitch_for_desktop_v5_1_0.Kraken.Stream
                 pbPrev.ImageLocation = stream.preview.medium;
                 pbPrev.Cursor = Cursors.Hand;
                 pbPrev.Click += OpenStream_onPicturBoxClick;
+                pbPrev.ContextMenuStrip = rightClickContextMenu;
                 //
                 // PicturBox Game
                 //
@@ -221,6 +262,9 @@ namespace Twitch_for_desktop_v5_1_0.Kraken.Stream
 
         private void OpenStream_onPicturBoxClick(object sender, EventArgs e)
         {
+            var mouseEventArgs = (MouseEventArgs) e;
+            if (mouseEventArgs.Button != MouseButtons.Left)
+                return;
             Forms.PanelInfo p = (sender as PictureBox).Parent as Forms.PanelInfo;
             new Forms.Dialogs.OpenStream(p.Stream).ShowDialog();
         }

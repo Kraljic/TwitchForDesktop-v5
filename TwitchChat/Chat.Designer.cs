@@ -40,6 +40,7 @@
             this.btnSend = new System.Windows.Forms.Button();
             this.chatRefresh = new System.Windows.Forms.Timer(this.components);
             this.btnDebug = new System.Windows.Forms.Button();
+            this.lblChatRoom = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pbClose)).BeginInit();
             this.panelChat.SuspendLayout();
             this.SuspendLayout();
@@ -88,9 +89,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelChat.BackColor = System.Drawing.Color.White;
             this.panelChat.Controls.Add(this.rtbChat);
-            this.panelChat.Location = new System.Drawing.Point(12, 48);
+            this.panelChat.Location = new System.Drawing.Point(12, 74);
             this.panelChat.Name = "panelChat";
-            this.panelChat.Size = new System.Drawing.Size(477, 564);
+            this.panelChat.Size = new System.Drawing.Size(477, 538);
             this.panelChat.TabIndex = 10;
             // 
             // rtbChat
@@ -100,9 +101,9 @@
             this.rtbChat.Location = new System.Drawing.Point(0, 0);
             this.rtbChat.Name = "rtbChat";
             this.rtbChat.ReadOnly = true;
-            this.rtbChat.Size = new System.Drawing.Size(477, 564);
+            this.rtbChat.Size = new System.Drawing.Size(477, 538);
             this.rtbChat.TabIndex = 3;
-            this.rtbChat.Text = "Test";
+            this.rtbChat.Text = "";
             // 
             // txtMessage
             // 
@@ -142,12 +143,24 @@
             this.btnDebug.UseVisualStyleBackColor = true;
             this.btnDebug.Click += new System.EventHandler(this.btnDebug_Click);
             // 
+            // lblChatRoom
+            // 
+            this.lblChatRoom.AutoSize = true;
+            this.lblChatRoom.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.lblChatRoom.ForeColor = System.Drawing.Color.Gray;
+            this.lblChatRoom.Location = new System.Drawing.Point(13, 47);
+            this.lblChatRoom.Name = "lblChatRoom";
+            this.lblChatRoom.Size = new System.Drawing.Size(48, 24);
+            this.lblChatRoom.TabIndex = 12;
+            this.lblChatRoom.Text = "Chat";
+            // 
             // Chat
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(15)))), ((int)(((byte)(22)))));
             this.ClientSize = new System.Drawing.Size(501, 730);
+            this.Controls.Add(this.lblChatRoom);
             this.Controls.Add(this.btnDebug);
             this.Controls.Add(this.btnSend);
             this.Controls.Add(this.txtMessage);
@@ -182,5 +195,6 @@
         private System.Windows.Forms.RichTextBox rtbChat;
         private System.Windows.Forms.Timer chatRefresh;
         private System.Windows.Forms.Button btnDebug;
+        private System.Windows.Forms.Label lblChatRoom;
     }
 }

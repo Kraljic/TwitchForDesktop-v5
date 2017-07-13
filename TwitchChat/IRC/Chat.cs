@@ -26,7 +26,7 @@ namespace TwitchChat.IRC
         {
             try
             {
-                message.name = tags.Substring(1, tags.IndexOf('!') - 1);
+                message.name = tags.Substring(0, tags.IndexOf('!') - 1);
                 message.room = tags.Substring(tags.IndexOf('#')).Trim();
             }
             catch (Exception)

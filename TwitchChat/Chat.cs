@@ -68,7 +68,10 @@ namespace TwitchChat
                     return;
                 }
                 Channel = Channel.Init();
+
                 labelTitleTab.Text = Channel.display_name;
+                this.Text = "Chat Room: " + _room;
+                lblChatRoom.Text = "Chat: " + _room;
             }
             catch (Exception)
             {
@@ -109,7 +112,7 @@ namespace TwitchChat
             Connection.WriteLine("NICK " + Channel.name);
             Connection.WriteLine("CAP REQ :twitch.tv/tags");
 
-            Thread.Sleep(500);
+            Thread.Sleep(100);
             chatRefresh.Enabled = true;
 
             if ((new Regex("^([a-z]|_)*$")).Match(_room).Success)
@@ -122,43 +125,68 @@ namespace TwitchChat
         {
             while (Connection.Connected() && Connection.Available())
             {
-                var line = Connection.ReadLine();
-                if (line == "PING :tmi.twitch.tv")
-                {
-                    SendCommand("PONG :tmi.twitch.tv");
-                }
-                else if (line.Contains("PRIVMSG"))
-                {
-                    var msg = IRC.Chat.ReadMessage(line);
-                    AddTextColor(msg.displayName, msg.color, true);
-                    AddTextColor(": " + msg.message + "\n", Color.Black);
-                    if (rtbChat.Lines.Length > 200)
-                    {
-                        RemoveChatLines(rtbChat.Lines.Length - 200);
-                    }
-                }
-                else
-                {
-                    rtbChat.AppendText(line);
-                }
+                ReadIRCMessages();
+
                 Application.DoEvents();
                 Thread.Sleep(5);
+            }
+        }
+
+        private void ReadIRCMessages()
+        {
+            var line = Connection.ReadLine();
+            if (line == "PING :tmi.twitch.tv")
+            {
+                SendCommand("PONG :tmi.twitch.tv");
+            }
+            else if (line.Contains("PRIVMSG"))
+            {
+                var msg = IRC.Chat.ReadMessage(line);
+
+                if (msg.mod || msg.subscriber || msg.turbo)
+                    AddTextColor("[ ", Color.Black);
+                if (msg.subscriber)
+                    AddTextColor("S", Color.BlueViolet, true);
+                if (msg.mod)
+                    AddTextColor("M", Color.Green, true);
+                if (msg.turbo)
+                    AddTextColor("T", Color.Red, true);
+                if (msg.mod || msg.subscriber || msg.turbo)
+                    AddTextColor(" ] ", Color.Black);
+
+                if (!string.IsNullOrWhiteSpace(msg.displayName))
+                    AddTextColor(msg.displayName, msg.color, true);
+                else
+                    AddTextColor(msg.name, msg.color, true);
+
+                AddTextColor(": " + msg.message + "\n", Color.Black, false);
+                if (rtbChat.Lines.Length > 200)
+                {
+                    RemoveChatLines(rtbChat.Lines.Length - (200 + 10));
+                }
+            }
+            else
+            {
+                //Ignore
+                // rtbChat.AppendText(line);
             }
         }
 
         private void btnSend_Click(object sender, EventArgs e)
         {
             SendMessage(txtMessage.Text);
+            txtMessage.Text = string.Empty;
         }
 
         private void btnDebug_Click(object sender, EventArgs e)
         {
             SendCommand(txtMessage.Text.Trim());
+            txtMessage.Text = string.Empty;
         }
 
         private void SendCommand(string cmd)
         {
-            if (cmd.Trim() == "")
+            if (string.IsNullOrWhiteSpace(cmd))
                 return;
 
             if (Connection.Connected())
@@ -167,12 +195,14 @@ namespace TwitchChat
 
         private void SendMessage(string msg)
         {
-            if (msg.Trim() == "")
+            if (string.IsNullOrWhiteSpace(msg))
                 return;
 
             msg = msg.Replace("\n", " ").Trim();
             SendCommand("PRIVMSG #" + _room + " :" + msg);
 
+            AddTextColor(Channel.display_name, Color.MediumVioletRed, true);
+            AddTextColor(": " + msg + "\n", Color.Black, false);
         }
 
         public void AddTextColor(string text, Color c, bool bold = false)
@@ -183,10 +213,17 @@ namespace TwitchChat
             rtbChat.SelectionColor = c;
             if (bold)
                 rtbChat.SelectionFont = new Font(rtbChat.Font, FontStyle.Bold);
+            else
+                rtbChat.SelectionFont = new Font(rtbChat.Font, FontStyle.Regular);
+
             rtbChat.AppendText(text);
 
             rtbChat.SelectionColor = rtbChat.ForeColor;
-            rtbChat.SelectionFont = new Font(rtbChat.Font, FontStyle.Regular);
+
+            // Scroll to bottom
+            rtbChat.SelectionStart = rtbChat.TextLength - 1;
+            rtbChat.SelectionLength = 0;
+            rtbChat.ScrollToCaret();
         }
 
         public void RemoveChatLines(int count)
@@ -201,7 +238,7 @@ namespace TwitchChat
             }
             rtbChat.ReadOnly = true;
 
-            // Go to end
+            // Scroll to bottom
             rtbChat.SelectionStart = rtbChat.TextLength - 1;
             rtbChat.SelectionLength = 0;
             rtbChat.ScrollToCaret();

@@ -76,5 +76,10 @@ namespace Twitch_for_desktop_v5_1_0.Forms.Dialogs
             Video.Stream.OpenStream(_streamJson, streamUrl.Url);
             Close();
         }
+
+        private void btnDownload_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Not implemented yet!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
     }
 }

@@ -194,6 +194,10 @@
     <Content Include="twitch-logo.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TwitchChat\TwitchChat.csproj">
+      <Project>{b401c342-7c60-41d7-b451-7e6a64d119ec}</Project>
+      <Name>TwitchChat</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TwitchDownloader\TwitchDownloader.csproj">
       <Project>{82fd8729-6046-40f7-b355-2844a7346111}</Project>
       <Name>TwitchDownloader</Name>

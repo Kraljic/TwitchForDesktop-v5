@@ -95,6 +95,7 @@
             this.btnDownload.TabIndex = 23;
             this.btnDownload.Text = "Download";
             this.btnDownload.UseVisualStyleBackColor = true;
+            this.btnDownload.Click += new System.EventHandler(this.btnDownload_Click);
             // 
             // btnOpen
             // 

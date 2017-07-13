@@ -4,9 +4,11 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 using System.Windows.Forms;
+using TwitchChat;
 
 namespace Twitch_for_desktop_v5_1_0.Kraken.Users
 {
@@ -132,7 +134,7 @@ namespace Twitch_for_desktop_v5_1_0.Kraken.Users
             }
             else if (text.Contains("Chat"))
             {
-                Process.Start("https://www.twitch.tv/" + _channel.name + "/chat?popout=");
+                Process.Start("TwitchChat.exe", "room=" + _channel.name + " oauth_token=" + Settings.oauthToken);
             }
         }
 
