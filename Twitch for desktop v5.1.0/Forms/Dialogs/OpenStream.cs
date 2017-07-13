@@ -7,20 +7,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TwitchDownloader.Stream;
 
 namespace Twitch_for_desktop_v5_1_0.Forms.Dialogs
 {
     public partial class OpenStream : Form
     {
-        private readonly Kraken.Stream.JSON.Stream _stream;
-        private List<Video.Playlist.Video> _playList;
+        private readonly Kraken.Stream.JSON.Stream _streamJson;
+        private Stream _stream;
 
         public OpenStream(long channelId)
         {
             InitializeComponent();
 
-            _stream = Kraken.Stream.ChannelStream.GetStream(channelId);
-            if (_stream == null)
+            _streamJson = Kraken.Stream.ChannelStream.GetStream(channelId);
+            if (_streamJson == null)
             {
                 MessageBox.Show("Couldn't open stream.", "Info", MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
@@ -28,10 +29,10 @@ namespace Twitch_for_desktop_v5_1_0.Forms.Dialogs
             }
         }
 
-        public OpenStream(Kraken.Stream.JSON.Stream stream)
+        public OpenStream(Kraken.Stream.JSON.Stream streamJson)
         {
             InitializeComponent();
-            _stream = stream;
+            _streamJson = streamJson;
         }
 
         private void pbClose_Click(object sender, EventArgs e)
@@ -41,38 +42,38 @@ namespace Twitch_for_desktop_v5_1_0.Forms.Dialogs
 
         private void OpenStream_Load(object sender, EventArgs e)
         {
-            lblChannelName.Text = _stream.channel.display_name;
-            lblTitle.Text = _stream.channel.status;
-            pbPreview.ImageLocation = _stream.preview.medium;
-
-            if (!LoadPlaylistData())
+            try
             {
-                MessageBox.Show("Couldn't open stream (" + _stream.channel.name + ")", "Info", MessageBoxButtons.OK,
+                lblChannelName.Text = _streamJson.channel.display_name;
+                lblTitle.Text = _streamJson.channel.status;
+                pbPreview.ImageLocation = _streamJson.preview.medium;
+
+                LoadPlaylist();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Couldn't open stream (" + _streamJson.channel.name + ")", "Info", MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
                 Close();
-                return;
             }
+        }
+        
+        private void LoadPlaylist()
+        {
+            _stream = new Stream(_streamJson.channel.name, Settings.oauthToken);
 
-            foreach (var stream in _playList)
+            foreach (var stream in _stream.Playlist.Videos)
             {
                 cbResolutions.Items.Add(stream);
             }
 
             cbResolutions.SelectedIndex = 0;
         }
-        
-        private bool LoadPlaylistData()
-        {
-            var playlistData = Kraken.Stream.DownloadPlaylist.Download(_stream.channel.name);
-            _playList = new Video.Playlist(playlistData).Videos;
-
-            return _playList.Count > 0;
-        }
 
         private void btnOpen_Click(object sender, EventArgs e)
         {
-            var streamUrl = _playList[cbResolutions.SelectedIndex];
-            Video.Stream.OpenStream(_stream, streamUrl.Url);
+            var streamUrl = _stream.Playlist.Videos[cbResolutions.SelectedIndex];
+            Video.Stream.OpenStream(_streamJson, streamUrl.Url);
             Close();
         }
     }

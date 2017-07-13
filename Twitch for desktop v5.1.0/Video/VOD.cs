@@ -13,7 +13,7 @@ namespace Twitch_for_desktop_v5_1_0.Video
 {
     public class VOD
     {
-        public static void OpenVOD(Kraken.VOD.JSON.Video video, string vodUrl)
+        public static void OpenVOD(JSON.Video video, string vodUrl)
         {
             var title = video.channel.display_name + " - VOD - " + video.title;
 

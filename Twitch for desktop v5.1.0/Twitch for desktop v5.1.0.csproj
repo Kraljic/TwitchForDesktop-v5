@@ -110,7 +110,6 @@
     <Compile Include="Kraken\Following\Show.cs" />
     <Compile Include="Kraken\Games\JSON.cs" />
     <Compile Include="Kraken\Games\Show.cs" />
-    <Compile Include="Kraken\Stream\DownloadPlaylist.cs" />
     <Compile Include="Kraken\Stream\JSON.cs" />
     <Compile Include="Kraken\Stream\Show.cs" />
     <Compile Include="Kraken\Token.cs" />
@@ -129,7 +128,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Setup\Install.cs" />
     <Compile Include="Setup\InstallVLC.cs" />
-    <Compile Include="Video\Playlist.cs" />
     <Compile Include="Video\Stream.cs" />
     <Compile Include="Video\VLC.cs" />
     <Compile Include="Video\VOD.cs" />

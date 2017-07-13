@@ -9,7 +9,7 @@ namespace Twitch_for_desktop_v5_1_0.Video
 {
     public class Stream
     {
-        public static void OpenStream(Kraken.Stream.JSON.Stream stream, string streamUrl)
+        public static void OpenStream(JSON.Stream stream, string streamUrl)
         {
             var title = stream.channel.display_name + " is playing " + stream.channel.game;
 
