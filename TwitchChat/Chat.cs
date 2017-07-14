@@ -17,7 +17,6 @@ namespace TwitchChat
     public partial class Chat : Form
     {
         private bool _dragging = false;
-        private Point _offset;
         private Point _start_point = new Point(0, 0);
 
         private string _oauthToken = null;
@@ -30,6 +29,8 @@ namespace TwitchChat
         {
             InitializeComponent();
             GetArguments(args);
+
+            this.AcceptButton = btnSend;
         }
         public void GetArguments(string[] args)
         {
@@ -242,6 +243,11 @@ namespace TwitchChat
             rtbChat.SelectionStart = rtbChat.TextLength - 1;
             rtbChat.SelectionLength = 0;
             rtbChat.ScrollToCaret();
+        }
+
+        private void txtMessage_Click(object sender, EventArgs e)
+        {
+            this.AcceptButton = btnSend;
         }
     }
 }

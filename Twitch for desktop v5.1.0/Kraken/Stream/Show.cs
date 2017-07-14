@@ -74,10 +74,6 @@ namespace Twitch_for_desktop_v5_1_0.Kraken.Stream
             };
             rightClickContextMenu.Items.AddRange(items);
             rightClickContextMenu.ItemClicked += RightClickContextMenu_ItemClicked;
-            /*rightClickContextMenu.MenuItems.Add("Open chat");
-            rightClickContextMenu.MenuItems.Add("Open stream");
-            rightClickContextMenu.MenuItems.Add("Show profile");
-            rightClickContextMenu.MenuItems.Add("View in web");*/
         }
 
         private void RightClickContextMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -93,7 +89,7 @@ namespace Twitch_for_desktop_v5_1_0.Kraken.Stream
                     new Forms.Dialogs.OpenStream(obj.Stream).ShowDialog();
                     break;
                 case "Show profile":
-                    new Forms.User(obj.Stream.channel._id).ShowDialog();
+                    new User(obj.Stream.channel._id).ShowDialog();
                     break;
                 case "View in web":
                     Process.Start(obj.Stream.channel.url);
