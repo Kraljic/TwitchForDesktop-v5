@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
@@ -15,7 +16,15 @@ namespace Twitch_for_desktop_v5_1_0.Video
 
             var startArgs = streamUrl + " --file-caching=5000 --meta-title=\"" + title + "\"";
 
-            new VLC(startArgs).Play();
+            try
+            {
+                new VLC(startArgs).Play();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Invalid VLC path", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
         }
     }
 }

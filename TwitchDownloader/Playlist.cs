@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Permissions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -40,6 +41,8 @@ namespace TwitchDownloader
                 {
                     // get url
                     tmpVideo.Url = s;
+                    if (tmpVideo.Id == "audio_only")
+                        tmpVideo.Resolution = "audio";
                     Videos.Add(tmpVideo);
                     tmpVideo = new VideoSorce();
                 }

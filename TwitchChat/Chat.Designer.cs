@@ -97,7 +97,7 @@
             // rtbChat
             // 
             this.rtbChat.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtbChat.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.rtbChat.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.rtbChat.Location = new System.Drawing.Point(0, 0);
             this.rtbChat.Name = "rtbChat";
             this.rtbChat.ReadOnly = true;

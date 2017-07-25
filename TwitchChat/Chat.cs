@@ -135,7 +135,7 @@ namespace TwitchChat
 
         private void ReadIRCMessages()
         {
-            var line = Connection.ReadLine();
+            var line = Connection.ReadLine().Trim();
             if (line == "PING :tmi.twitch.tv")
             {
                 SendCommand("PONG :tmi.twitch.tv");
@@ -210,25 +210,29 @@ namespace TwitchChat
         {
             rtbChat.SelectionStart = rtbChat.TextLength;
             rtbChat.SelectionLength = 0;
+            
 
             rtbChat.SelectionColor = c;
             if (bold)
                 rtbChat.SelectionFont = new Font(rtbChat.Font, FontStyle.Bold);
             else
                 rtbChat.SelectionFont = new Font(rtbChat.Font, FontStyle.Regular);
-
+            
             rtbChat.AppendText(text);
 
             rtbChat.SelectionColor = rtbChat.ForeColor;
 
             // Scroll to bottom
-            rtbChat.SelectionStart = rtbChat.TextLength - 1;
+            rtbChat.SelectionStart = rtbChat.TextLength;
             rtbChat.SelectionLength = 0;
             rtbChat.ScrollToCaret();
         }
 
         public void RemoveChatLines(int count)
         {
+            if (rtbChat.Focused)
+                return;
+
             rtbChat.ReadOnly = false;
             for (int i = 0; i < count; i++)
             {

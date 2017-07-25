@@ -9,7 +9,7 @@ namespace TwitchDownloader.Stream
 {
     public class Playlist : TwitchDownloader.Playlist
     {
-        private const string PlaylistLink = "http://usher.twitch.tv/api/channel/hls/{ID}?nauthsig={SIG}&nauth={TOKEN}&allow_source=true";
+        private const string PlaylistLink = "http://usher.twitch.tv/api/channel/hls/{ID}?nauthsig={SIG}&nauth={TOKEN}&allow_source=true&allow_audio_only=true";
 
         public Playlist(string channelId, string oAuthToken)
         {
